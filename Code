@@ -1,0 +1,71 @@
+import pandas as pd
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+questionnaire = pd.read_csv("C:\\Users\Justin.Ko\Documents\ORD-366544-L4Z4 - Feel Good Study_Final data_07Dec.csv",parse_dates=['TIMES_4'])
+
+questionnaire.head()
+
+questionnaire.describe()
+
+questionnaire.groupby(['INTERVIEW_START','INTERVIEW_END']).count()
+
+questionnaire.Q3.replace({' ':0}, inplace=True)
+
+questionnaire.Q3 =questionnaire.Q3.astype(np.int64)
+
+questionnaire.dtypes
+
+questionnaire=questionnaire.drop(columns=['PID','TIMES_3'])
+
+questionnaire['TIMES_3']=questionnaire.TIMES_3/60
+
+questionnaire.hist(figsize=(20,16));
+
+questionnaire['TIMES_3'].plot(kind='hist')
+plt.title('Time taken to complete survey')
+plt.xlabel('Minutes')
+plt.ylabel('Count')
+
+city = sns.countplot(x='HIDS3', data=questionnaire,)
+city.set(xticklabels = ['Sydney','Melbourne','Brisbane','Adelaide','Perth'])
+city.set_title('Cities Respondents Live')
+city.set_xlabel('City')
+city.set_ylabel('Count');
+
+ax=pd.crosstab(questionnaire.S1,questionnaire.S2).plot(kind='bar')
+ax.legend(['18–24','25-34','35-44','45-54','55-64','65 or older'])
+ax.set_title('Age and Gender of Interviewee')
+ax.set_xlabel('')
+ax.set_ylabel('Count')
+plt.xticks(np.arange(3),('Male','Female','Other'),rotation=0);
+
+f, axes = plt.subplots(3,1,figsize=(20,40),sharey=True)
+# plt.figure(figsize=(20, 14))
+city = sns.countplot(x='Q4_1', data=questionnaire, ax = axes[0])
+city.set_title('Advertising promotes awareness of health and wellbeing')
+city.set(xticklabels = ['Strongly Disagree','Somewhat Disagree','Neutral','Somewhat Agree','Strongly Agree'])
+city.set_xlabel(' ')
+city = sns.countplot(x='Q4_2', data=questionnaire, ax = axes[1])
+city.set_title('Advertising promotes awareness of health and wellbeing')
+city.set(xticklabels = ['Strongly Disagree','Somewhat Disagree','Neutral','Somewhat Agree','Strongly Agree'])
+city.set_xlabel(' ')
+city = sns.countplot(x='Q4_3', data=questionnaire, ax = axes[2])
+city.set_title('Advertising promotes awareness of health and wellbeing')
+city.set(xticklabels = ['Strongly Disagree','Somewhat Disagree','Neutral','Somewhat Agree','Strongly Agree'])
+city.set_xlabel(' ')
+city.set_ylabel('Count');
+
+plt.figure(figsize=(12, 8))
+city = sns.countplot(x='Q4_3', data=questionnaire)
+city.set_title('Outdoor advertising can raise awareness for health and wellbeing')
+city.set(xticklabels = ['Strongly Disagree','Somewhat Disagree','Neutral','Somewhat Agree','Strongly Agree'])
+city.set_xlabel(' ');
+
+city = sns.countplot(x='Q1', data=questionnaire,)
+city.set(xticklabels = ['1','2','3','4','5','6','7','8','9','10'])
+city.set_title('Rate How Often You Look Up')
+city.set_xlabel('Rating')
+city.set_ylabel('Count');
